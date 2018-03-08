@@ -1,7 +1,7 @@
 ## Process to Onboard onto AES
 
 1.	To onboard onto our Azure Email Service (AES) using our API call, we first need your certificate thumbprint 
-     - To do this, you will need to create a Client Certificate (.cer file - public key file) by going to http://SSLadmin - follow the steps outlined on the page
+     - To do this, you will need to create a Client Certificate (.cer file - public key file) by going to [SSLAdmin] (http://SSLadmin)- follow the steps outlined on the page
 
 **NOTE:** 
 
@@ -38,4 +38,32 @@
 ## Calling the AES API
 
 You can use this sample code snippet to start making calls to our service:
+```C#
+ var environment = EmailEnvironment.Prod;
+```
+You can use our pre-production environment too with the value as "EmailEnvironment.Int" DO NOT use our Dev environment to test.
+```C#
+var client = Microsoft.CE.CIP.TransactionalEmailClient.EmailClient.Create(environment, (your assigned ClientId from CIP), 
+(your certificate thumbprint that is used to authenticate and onboard with CIP));
+```
+This expects the onboarded certificate is installed on the calling machine
+
+<img src="\AES\wanuget.png" class="inline">
+
+## Sovereign Cloud Onboarding
+
+If you are interested in onboarding into one of the sovereign/national clouds: Blackforest, Fairfax, and/or Mooncake, please provide the following to AES Support:
+
+
+| Items | Public Cloud | Sovereign Cloud |
+| :--- | :--- | :--- |
+| Transactional emails | Yes | Yes |
+| Promotional emails | Yes | Yes |
+| Transactional Opt Out | Yes | Yes |
+|Telemetry | Yes | No |
+|Schedule emails | Yes | No |
+    
+    
+  
+
 
