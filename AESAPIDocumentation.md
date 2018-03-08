@@ -1,7 +1,7 @@
 ## Process to Onboard onto AES
 
 1.	To onboard onto our Azure Email Service (AES) using our API call, we first need your certificate thumbprint 
-     - To do this, you will need to create a Client Certificate (.cer file - public key file) by going to [SSLAdmin] (http://SSLadmin)- follow the steps outlined on the page
+     - To do this, you will need to create a Client Certificate (.cer file - public key file) by going to [SSLAdmin](http://SSLadmin) - follow the steps outlined on the page
 
 **NOTE:** 
 
@@ -48,7 +48,48 @@ var client = Microsoft.CE.CIP.TransactionalEmailClient.EmailClient.Create(enviro
 ```
 This expects the onboarded certificate is installed on the calling machine
 
-<img src="\AES\wanuget.png" class="inline">
+
+### Sample snippet when submitting Azure Subscription GUIDs:
+```C#
+var sendResponse = client.SendBatchAsync(new BatchEmailRequest(new List<EmailRequest>
+{
+ new EmailRequest
+{   
+   TemplateId = "<your templateid from Send with us>",
+   TemplateCulture = "<locale>",
+   TemplateVersion = "<version id of the template from Send with us>",
+   SubstitutionData = new Dictionary<string, object>()
+{
+    { "<placeholder name>", “<place holder value>" },
+},
+   SubscriptionId = "<azure active subscription Id to target emails to>",
+   SendToSubscriptionAdmin = true,
+   SendToSubscriptionCoAdmins = false,
+   SendToRBACOwners = true,
+   SubscriptionRBACOwnersEmailLine = EmailLine.Bcc,
+   SendToRBACReaders = true,
+   SubscriptionRBACReadersEmailLine = EmailLine.Bcc,
+   SendToRBACContributors = true,
+   SubscriptionRBACContributorsEmailLine = EmailLine.Bcc,
+   SendToSubscriptionServiceAdmins = true,
+   SubscriptionNotFoundBehavior = SubscriptionNotFoundBehavior.SendWithoutAdminEmails,
+   SubscriptionAdminEmailLine = EmailLine.To,
+   SubscriptionCoAdminsEmailLine = EmailLine.Cc,
+   SubscriptionServiceAdminsEmailLine = EmailLine.Cc,	
+   SubscriptionRoleBasedAdminsEmailLine = EmailLine.Bcc        
+}
+}));
+ 
+var batchEmailResponse = sendResponse.GetAwaiter().GetResult();
+Console.WriteLine("Batchid: " + batchEmailResponse.BatchId);
+Console.WriteLine("BatchStatus: " + batchEmailResponse.BatchStatus);
+Console.WriteLine("ErrorReason: " + batchEmailResponse.ErrorReason);
+```
+
+Import the Nuget packet "Microsoft.CE.CIP.TransactionalEmailClient" from the package source 'wanuget' 
+
+![Wanuget screenshot](/Wanuget.png)
+
 
 ## Sovereign Cloud Onboarding
 
